@@ -3,14 +3,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http')
 const Web3 = require('web3')
-const HDWalletProvider = require('@truffle/hdwallet-provider')
+// const HDWalletProvider = require('@truffle/hdwallet-provider')
 const moment = require('moment-timezone')
 const numeral = require('numeral')
 const _ = require('lodash')
 const axios = require('axios')
 
 // SERVER CONFIG
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001
 const app = express();
 const server = http.createServer(app).listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
@@ -38,7 +38,7 @@ async function checkPair(args) {
 
   const uniswapResult = await exchangeContract.methods.getEthToTokenInputPrice(inputAmount).call()
   let kyberResult = await kyberRateContract.methods.getExpectedRate(inputTokenAddress, outputTokenAddress, inputAmount, true).call()
-
+  console.log(kyberResult)
   console.table([{
     'Input Token': inputTokenSymbol,
     'Output Token': outputTokenSymbol,
@@ -108,5 +108,5 @@ async function monitorPrice() {
 }
 
 // Check markets every n seconds
-const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 3000 // 3 Seconds
+const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 5000 // 3 Seconds
 priceMonitor = setInterval(async () => { await monitorPrice() }, POLLING_INTERVAL)
